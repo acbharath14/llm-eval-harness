@@ -136,7 +136,9 @@ def main(argv: list[str] | None = None) -> int:
     }, indent=2))
 
     if args.output:
-        Path(args.output).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        out_path = Path(args.output)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(f"Full report written to {args.output}", file=sys.stderr)
 
     if drift_result and drift_result["drift_detected"]:
