@@ -106,9 +106,31 @@ def _render_report(report: dict, use_baseline: bool = True) -> None:
         "forbidden_hits": ", ".join(e.get("forbidden_hits", [])),
         "grounded_recall": e.get("grounded_recall"),
         "novel_keywords": ", ".join(e.get("augmented_keywords", [])[:5]),
-        "response": e.get("response_preview", ""),
     } for e in scored]
     st.dataframe(rows, use_container_width=True)
+
+    st.subheader("Inspect individual items")
+    item_ids = [e.get("item_id", e.get("id")) for e in scored]
+    selected = st.selectbox("Select an item to inspect", item_ids)
+    detail = next(e for e in scored
+                  if e.get("item_id", e.get("id")) == selected)
+    st.markdown(f"**Question ({detail.get('id')}, "
+                f"{detail.get('severity')}, {detail.get('category')}):**")
+    st.write(detail.get("question", ""))
+    st.markdown("**Model response:**")
+    st.write(detail.get("response", "") or "_No response (responder error)_")
+    if detail.get("responder_error"):
+        st.error(f"Responder error: {detail['responder_error']}")
+    st.markdown("**Reference answer:**")
+    st.write(detail.get("ideal_answer", ""))
+    col_a, col_b = st.columns(2)
+    col_a.markdown("**Expected keywords:**")
+    col_a.write(", ".join(detail.get("expected_keywords", [])))
+    col_b.markdown("**Must not contain:**")
+    col_b.write(", ".join(detail.get("must_not_contain", [])) or "(none)")
+    if detail.get("judge") == "llm" and detail.get("judge_reasoning"):
+        st.markdown("**Judge reasoning:**")
+        st.write(detail["judge_reasoning"])
 
 
 def _render_comparison(reports: list[dict], names: list[str]) -> None:
