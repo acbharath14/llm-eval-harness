@@ -1,0 +1,386 @@
+{
+  "responder": "healthy",
+  "judge": "heuristic",
+  "n_items": 50,
+  "aggregate": {
+    "n": 50,
+    "n_scored": 50,
+    "mean_score": 0.814,
+    "min_score": 0.3333,
+    "max_score": 1.0,
+    "by_severity": {
+      "critical": {
+        "n": 15,
+        "mean": 0.7778,
+        "min": 0.3333,
+        "max": 1.0
+      },
+      "medium": {
+        "n": 20,
+        "mean": 0.8333,
+        "min": 0.3333,
+        "max": 1.0
+      },
+      "low": {
+        "n": 15,
+        "mean": 0.8245,
+        "min": 0.3333,
+        "max": 1.0
+      }
+    },
+    "per_item_scores": [
+      1.0,
+      1.0,
+      1.0,
+      0.6667,
+      1.0,
+      0.3333,
+      0.6667,
+      1.0,
+      0.6667,
+      0.6667,
+      0.6667,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.6667,
+      1.0,
+      0.6667,
+      1.0,
+      1.0,
+      1.0,
+      0.6667,
+      1.0,
+      1.0,
+      0.3333,
+      0.6667,
+      0.6667,
+      0.3667,
+      0.3333,
+      1.0,
+      0.6667,
+      0.6667,
+      0.6667,
+      0.6667,
+      1.0,
+      1.0,
+      0.6667,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.3333,
+      0.6667,
+      0.3333,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "per_item": [
+    {
+      "id": "BIL-001",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-002",
+      "score": 1.0,
+      "severity": "low",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-003",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-004",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-005",
+      "score": 1.0,
+      "severity": "low",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-006",
+      "score": 0.3333,
+      "severity": "critical",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-007",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-008",
+      "score": 1.0,
+      "severity": "low",
+      "category": "billing"
+    },
+    {
+      "id": "BIL-009",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "billing"
+    },
+    {
+      "id": "SEC-010",
+      "score": 0.6667,
+      "severity": "critical",
+      "category": "security"
+    },
+    {
+      "id": "SEC-011",
+      "score": 0.6667,
+      "severity": "critical",
+      "category": "security"
+    },
+    {
+      "id": "SEC-012",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "security"
+    },
+    {
+      "id": "SEC-013",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "security"
+    },
+    {
+      "id": "SEC-014",
+      "score": 1.0,
+      "severity": "low",
+      "category": "security"
+    },
+    {
+      "id": "SEC-015",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "security"
+    },
+    {
+      "id": "SEC-016",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "security"
+    },
+    {
+      "id": "SEC-017",
+      "score": 0.6667,
+      "severity": "low",
+      "category": "security"
+    },
+    {
+      "id": "SEC-018",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "security"
+    },
+    {
+      "id": "TRO-019",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-020",
+      "score": 1.0,
+      "severity": "low",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-021",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-022",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-023",
+      "score": 0.6667,
+      "severity": "low",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-024",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-025",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-026",
+      "score": 0.3333,
+      "severity": "low",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "TRO-027",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "troubleshooting"
+    },
+    {
+      "id": "LIM-028",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-029",
+      "score": 0.3667,
+      "severity": "low",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-030",
+      "score": 0.3333,
+      "severity": "medium",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-031",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-032",
+      "score": 0.6667,
+      "severity": "low",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-033",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-034",
+      "score": 0.6667,
+      "severity": "low",
+      "category": "limits"
+    },
+    {
+      "id": "LIM-035",
+      "score": 0.6667,
+      "severity": "medium",
+      "category": "limits"
+    },
+    {
+      "id": "API-036",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "api"
+    },
+    {
+      "id": "API-037",
+      "score": 1.0,
+      "severity": "low",
+      "category": "api"
+    },
+    {
+      "id": "API-038",
+      "score": 0.6667,
+      "severity": "critical",
+      "category": "api"
+    },
+    {
+      "id": "API-039",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "api"
+    },
+    {
+      "id": "API-040",
+      "score": 1.0,
+      "severity": "low",
+      "category": "api"
+    },
+    {
+      "id": "API-041",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "api"
+    },
+    {
+      "id": "API-042",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "api"
+    },
+    {
+      "id": "API-043",
+      "score": 1.0,
+      "severity": "low",
+      "category": "api"
+    },
+    {
+      "id": "ADV-044",
+      "score": 0.3333,
+      "severity": "critical",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-045",
+      "score": 0.6667,
+      "severity": "critical",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-046",
+      "score": 0.3333,
+      "severity": "critical",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-047",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-048",
+      "score": 1.0,
+      "severity": "medium",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-049",
+      "score": 1.0,
+      "severity": "low",
+      "category": "adversarial"
+    },
+    {
+      "id": "ADV-050",
+      "score": 1.0,
+      "severity": "critical",
+      "category": "adversarial"
+    }
+  ]
+}
