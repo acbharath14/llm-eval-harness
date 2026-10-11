@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -83,10 +84,26 @@ def main(argv: list[str] | None = None) -> int:
     responder = RESPONDERS[args.responder]
     judge = LLMJudge() if args.judge == "llm" else HeuristicJudge()
 
-    scored = run_eval(items, responder, judge)
-    report = {
+    # Model provenance — so reports are traceable to exact models.
+    import datetime
+    config = {
         "responder": args.responder,
         "judge": args.judge,
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "n_items": len(items),
+    }
+    if args.responder == "ollama":
+        config["responder_model"] = os.environ.get("OLLAMA_MODEL", "qwen3:8b")
+        config["responder_host"] = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+    if args.judge == "llm":
+        config["judge_model"] = getattr(judge, "model", "unknown")
+        config["judge_api_base"] = getattr(judge, "api_base", "unknown")
+
+    scored = run_eval(items, responder, judge)
+    report = {
+        "config": config,
+        "responder": args.responder,  # kept for backwards compat
+        "judge": args.judge,          # kept for backwards compat
         "aggregate": aggregate(scored),
         "items": [{k: v for k, v in e.items() if k != "item"} | {"item_id": e["item"]["id"]}
                    for e in scored],
@@ -106,6 +123,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"WARNING: baseline comparison skipped: {e}", file=sys.stderr)
 
     print(json.dumps({
+        "config": report["config"],
         "responder": report["responder"],
         "judge": report["judge"],
         "aggregate": report["aggregate"],
