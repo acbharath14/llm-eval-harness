@@ -37,6 +37,10 @@ def run_eval(items: list[dict], responder, judge) -> list[dict]:
             "id": item["id"],
             "category": item["category"],
             "severity": item["severity"],
+            "question": item["question"],
+            "expected_keywords": item.get("expected_keywords", []),
+            "must_not_contain": item.get("must_not_contain", []),
+            "ideal_answer": item.get("ideal_answer", ""),
             "score": judged.get("score"),
             "judge": judged.get("judge"),
             "keyword_coverage": judged.get("keyword_coverage"),
@@ -44,6 +48,7 @@ def run_eval(items: list[dict], responder, judge) -> list[dict]:
             "grounded_precision": g["grounded_precision"],
             "grounded_recall": g["grounded_recall"],
             "augmented_keywords": augmented_keywords(item, response),
+            "response": response or "",
             "response_preview": (response or "")[:200],
             "item": item,
         }
