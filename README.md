@@ -149,7 +149,7 @@ Env vars:
 │   └── runner.py        # CLI entry point
 ├── data/golden_qa.json
 ├── baselines/baseline_results.json   # healthy baseline (mean 0.814)
-├── tests/               # 42 tests
+├── tests/               # 53 tests
 ├── dashboard.py         # Streamlit UI
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
@@ -169,8 +169,10 @@ Without `JUDGE_API_KEY`, the LLM judge skips gracefully and reports why.
 
 ## CI
 
-`.github/workflows/ci.yml` runs the test suite on push. (Added via the
-GitHub web UI — the API cannot create workflow files.)
+No workflow runs on PRs yet: `.github/workflows/ci.yml` exists on `main`
+but is empty (0 bytes). The suite itself is green (53 tests, verified
+locally). The workflow text to paste via the GitHub web UI is in the
+hygiene PR description — workflow files cannot be pushed via the API.
 
 ## Honest limits
 
