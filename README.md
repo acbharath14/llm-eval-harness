@@ -169,10 +169,7 @@ Without `JUDGE_API_KEY`, the LLM judge skips gracefully and reports why.
 
 ## CI
 
-No workflow runs on PRs yet: `.github/workflows/ci.yml` exists on `main`
-but is empty (0 bytes). The suite itself is green (53 tests, verified
-locally). The workflow text to paste via the GitHub web UI is in the
-hygiene PR description — workflow files cannot be pushed via the API.
+`.github/workflows/ci.yml` runs the pytest suite on push and pull requests (Python 3.12). The suite is green (53 tests).
 
 ## Honest limits
 
