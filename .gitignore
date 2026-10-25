@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+# test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+# generated eval outputs (regenerable via the runner; the checked-in
+# healthy baseline in baselines/ is intentional and NOT ignored)
+reports/
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
