@@ -15,8 +15,17 @@ From the repo root:
 
 ```bash
 pip install ragas datasets langchain-ollama
+pip install "langchain-community<0.4"   # ragas 0.4.3 imports ChatVertexAI
+                                        # from a path 0.4.x removed
 python3 frameworks/ragas/smoke_ollama.py
 ```
+
+## Notes
+
+- `RunConfig(timeout=600)` is set in the script: CPU Ollama judges exceed
+  ragas's default 60s per-metric timeout. Expect ~2-5 min for both metrics.
+- Ignore the `multiprocess`/`ResourceTracker` traceback at exit — cosmetic,
+  Python 3.12 fork cleanup noise.
 
 ## Green looks like
 

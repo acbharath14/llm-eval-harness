@@ -17,7 +17,8 @@ import sys
 from datasets import Dataset
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 from ragas import evaluate
-from ragas.metrics import answer_relevancy, faithfulness
+from ragas.metrics.collections import answer_relevancy, faithfulness
+from ragas.run_config import RunConfig
 
 
 def main() -> int:
@@ -43,6 +44,9 @@ def main() -> int:
         metrics=[faithfulness, answer_relevancy],
         llm=ChatOllama(model="qwen3:8b"),
         embeddings=OllamaEmbeddings(model="nomic-embed-text"),
+        # CPU Ollama judges are slow: the default 60s per-metric timeout
+        # kills both jobs. 600s each is plenty; expect ~2-5 min total.
+        run_config=RunConfig(timeout=600),
     )
     df = result.to_pandas()
     print(df[["faithfulness", "answer_relevancy"]].to_string(index=False))
