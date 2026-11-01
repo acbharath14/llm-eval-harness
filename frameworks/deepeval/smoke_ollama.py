@@ -8,7 +8,13 @@ local. Run from the repo root:
 
 Green = prints a score and a reason, no API key configured.
 """
+import os
 import sys
+
+# CPU-bound Ollama judges are slow: a single verdict round-trip can exceed
+# DeepEval's default per-attempt timeout (~90s). Raise it for local runs.
+# (This is a local-hardware tuning, not a framework bug.)
+os.environ.setdefault("DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE", "600")
 
 from deepeval.models import OllamaModel
 from deepeval.metrics import AnswerRelevancyMetric
