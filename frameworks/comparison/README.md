@@ -10,7 +10,7 @@ re-running all three frameworks.
 | Framework | Verdict | Notes |
 |---|---|---|
 | promptfoo | **PASS** | `npx promptfoo@latest eval` — 2/2 asserts green, 9m32s, zero config friction. Cleanest pass. |
-| deepeval | PENDING re-run | First run hit the ~90s per-attempt timeout on CPU judges; fixed via `DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE=600` baked into the smoke script. Re-run not yet pasted. |
+| deepeval | **PASS** | Needed `DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE=600` (baked into the smoke script) — CPU judges exceed the ~90s default. Score 1.0 on the smoke case with a sensible reason. |
 | ragas 0.4.3 | **FAIL (recommended)** | Four layers: (1) LangChain 1.x removed `langchain_community.chat_models.vertexai` — needs `pip install "langchain-community<0.4"`; (2) default 60s per-metric timeout kills CPU judges — needs `RunConfig(timeout=600)`; (3) metric API churn: deprecated `ragas.metrics` singletons → `ragas.metrics.collections` classes, instantiated with `llm=`/`embeddings=`; (4) architectural: collections metrics validate `isinstance` against `InstructorLLM` and reject `ChatOllama` outright — local Ollama is not a supported judge path, only OpenAI-style endpoints via `llm_factory`. Layers 1–3 are fixable friction; layer 4 is by design. |
 
 ## Method (when Phase 1 starts)
