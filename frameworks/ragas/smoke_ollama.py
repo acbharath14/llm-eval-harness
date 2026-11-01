@@ -41,7 +41,7 @@ def main() -> int:
     }
     result = evaluate(
         Dataset.from_dict(data),
-        metrics=[faithfulness, answer_relevancy],
+        metrics=[faithfulness(), answer_relevancy()],
         llm=ChatOllama(model="qwen3:8b"),
         embeddings=OllamaEmbeddings(model="nomic-embed-text"),
         # CPU Ollama judges are slow: the default 60s per-metric timeout
