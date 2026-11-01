@@ -1,0 +1,24 @@
+description: Phase 0a smoke — promptfoo vs local Ollama (qwen3:8b)
+
+providers:
+  - ollama:chat:qwen3:8b
+
+prompts:
+  - file://prompts.txt
+
+tests:
+  - description: billing-update-card
+    vars:
+      question: How do I update the credit card on my account?
+    assert:
+      - type: contains
+        value: Billing
+      - type: not-contains
+        value: delete your account
+
+  - description: password-reset
+    vars:
+      question: I forgot my password, how do I reset it?
+    assert:
+      - type: contains-any
+        value: ["reset", "email"]

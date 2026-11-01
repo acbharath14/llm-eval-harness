@@ -15,6 +15,9 @@ htmlcov/
 # generated eval outputs (regenerable via the runner; the checked-in
 # healthy baseline in baselines/ is intentional and NOT ignored)
 reports/
+# eval-framework artifacts (regenerable)
+frameworks/promptfoo/promptfoo-results/
+.deepeval/
 # OS / editor
 .DS_Store
 Thumbs.db
