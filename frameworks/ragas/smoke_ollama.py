@@ -17,7 +17,7 @@ import sys
 from datasets import Dataset
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 from ragas import evaluate
-from ragas.metrics.collections import answer_relevancy, faithfulness
+from ragas.metrics.collections import AnswerRelevancy, Faithfulness
 from ragas.run_config import RunConfig
 
 
@@ -41,7 +41,7 @@ def main() -> int:
     }
     result = evaluate(
         Dataset.from_dict(data),
-        metrics=[faithfulness(), answer_relevancy()],
+        metrics=[Faithfulness(), AnswerRelevancy()],
         llm=ChatOllama(model="qwen3:8b"),
         embeddings=OllamaEmbeddings(model="nomic-embed-text"),
         # CPU Ollama judges are slow: the default 60s per-metric timeout
