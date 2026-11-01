@@ -54,7 +54,8 @@ def main() -> int:
             done[entry["id"]] = entry
         print(f"resuming: {len(done)} already scored")
 
-    model = OllamaModel(model=os.environ.get("OLLAMA_MODEL", "qwen3:8b"))
+    model_name = os.environ.get("OLLAMA_MODEL", "qwen3:8b")
+    model = OllamaModel(model=model_name)
     metric = AnswerRelevancyMetric(model=model)
 
     items = []
@@ -77,17 +78,17 @@ def main() -> int:
         except Exception as e:  # keep partial results; re-run resumes
             print(f"  FAILED: {e}")
             out_path.write_text(json.dumps(
-                {"metric": "AnswerRelevancy", "model": model.model_name,
+                {"metric": "AnswerRelevancy", "model": model_name,
                  "items": items}, indent=1) + "\n")
             return 1
         items.append(entry)
         out_path.write_text(json.dumps(
-            {"metric": "AnswerRelevancy", "model": model.model_name,
+            {"metric": "AnswerRelevancy", "model": model_name,
              "items": items}, indent=1) + "\n")
         print(f"  score={entry['score']} ({entry['elapsed_s']}s)")
 
     total = round(time.perf_counter() - total_started, 1)
-    payload = {"metric": "AnswerRelevancy", "model": model.model_name,
+    payload = {"metric": "AnswerRelevancy", "model": model_name,
                "total_elapsed_s": total, "items": items}
     out_path.write_text(json.dumps(payload, indent=1) + "\n")
     print(f"done: {len(items)} scored -> {out_path} ({total}s total)")
