@@ -18,6 +18,11 @@ reports/
 # eval-framework artifacts (regenerable)
 frameworks/promptfoo/promptfoo-results/
 .deepeval/
+# Phase 1 comparison intermediates (regenerable; report.md is the deliverable)
+frameworks/comparison/phase1/responses_*.json
+frameworks/comparison/phase1/promptfoo_*.json
+frameworks/comparison/phase1/pf_results_*.json
+frameworks/comparison/phase1/deepeval_scores_*.json
 # OS / editor
 .DS_Store
 Thumbs.db
