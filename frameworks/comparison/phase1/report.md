@@ -52,4 +52,12 @@ A healthy framework separates the two: high on ollama, low on regressed.
 
 ## Recommendation
 
-_Analyst fills in:_ which framework to adopt for the harness, and for what role (e.g. promptfoo for cheap keyword gates in CI, DeepEval relevancy as the LLM-judge complement to the heuristic scorer).
+Adopt a **layered evaluation strategy** for llm-eval-harness:
+
+1. **Heuristic judge as the base gate.** Deterministic, instant, free. The 83% promptfoo–heuristic agreement shows keyword-based checks capture most of the correctness signal. Keep it as the first-pass filter.
+
+2. **promptfoo for regression detection in CI.** Its assertion framework adds structure the heuristic lacks (per-assert pass/fail, `not-icontains`). The 25% pass rate on healthy responses is a *calibration* issue — tune the asserts (allow paraphrase, loosen to key-concept coverage) rather than discarding it. The 0/12 on regressed proves it catches real regressions. 9-minute runtime, zero friction.
+
+3. **LLM judge for offline deep-dives, not CI gating.** AnswerRelevancy's 42% agreement isn't a failure — it's a category difference (topicality vs. correctness). Use it to catch off-topic hallucinations, but never as a correctness gate: the 1.0s on SEC-010/TRO-020 prove it passes fluent, vague non-answers. For correctness, prefer Faithfulness or a custom G-Eval criterion. And the cost is real — ~2 hours on CPU for 12 items. Reserve for offline analysis.
+
+4. **ragas: do not adopt.** The 0.4.x architecture requires InstructorLLM and rejects ChatOllama by design. It cannot run fully local. Document as a finding; revisit if native Ollama support lands.
