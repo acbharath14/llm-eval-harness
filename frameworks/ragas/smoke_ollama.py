@@ -22,6 +22,8 @@ from ragas.run_config import RunConfig
 
 
 def main() -> int:
+    llm = ChatOllama(model="qwen3:8b")
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
     data = {
         "question": ["How do I update the credit card on my account?"],
         "contexts": [
@@ -41,9 +43,9 @@ def main() -> int:
     }
     result = evaluate(
         Dataset.from_dict(data),
-        metrics=[Faithfulness(), AnswerRelevancy()],
-        llm=ChatOllama(model="qwen3:8b"),
-        embeddings=OllamaEmbeddings(model="nomic-embed-text"),
+        metrics=[Faithfulness(llm=llm), AnswerRelevancy(llm=llm, embeddings=embeddings)],
+        llm=llm,
+        embeddings=embeddings,
         # CPU Ollama judges are slow: the default 60s per-metric timeout
         # kills both jobs. 600s each is plenty; expect ~2-5 min total.
         run_config=RunConfig(timeout=600),
