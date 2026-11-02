@@ -23,6 +23,9 @@ frameworks/comparison/phase1/responses_*.json
 frameworks/comparison/phase1/promptfoo_*.json
 frameworks/comparison/phase1/pf_results_*.json
 frameworks/comparison/phase1/deepeval_scores_*.json
+# Phase 2 comparison intermediates (regenerable; report is the deliverable)
+frameworks/comparison/phase2/sidekick_capture.json
+frameworks/comparison/phase2/deepeval_rag_scores.json
 # OS / editor
 .DS_Store
 Thumbs.db
