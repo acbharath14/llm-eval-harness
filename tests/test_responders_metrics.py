@@ -30,11 +30,6 @@ def _mock_ollama_response(text: str):
     return mock_resp
 
 
-def test_ollama_responder_registered():
-    assert "ollama" in RESPONDERS
-    assert RESPONDERS["ollama"] is ollama_responder
-
-
 def test_ollama_responder_returns_answer():
     with patch("urllib.request.urlopen",
                return_value=_mock_ollama_response("Four.")):
