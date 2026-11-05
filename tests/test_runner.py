@@ -73,9 +73,9 @@ def test_limit_flag_rejects_zero(capsys):
 
 
 def test_report_includes_model_provenance(tmp_path, capsys, monkeypatch):
+    # Scenario 1: healthy responder; model provenance from env lands in config.
     monkeypatch.setenv("OLLAMA_MODEL", "qwen3:8b")
     out = tmp_path / "report.json"
-    # Use healthy responder but force ollama config path via env
     code = main(["--responder", "healthy", "--limit", "2",
                  "--output", str(out)])
     assert code == 0
@@ -86,21 +86,20 @@ def test_report_includes_model_provenance(tmp_path, capsys, monkeypatch):
     # Backwards-compat keys still present
     assert report["responder"] == "healthy"
 
-
-def test_ollama_config_records_model(tmp_path, capsys, monkeypatch):
+    # Scenario 2: ollama responder records model + host provenance from env.
     monkeypatch.setenv("OLLAMA_MODEL", "qwen2.5-coder:32b")
     monkeypatch.setenv("OLLAMA_HOST", "http://myhost:11434")
-    out = tmp_path / "report.json"
+    out2 = tmp_path / "report2.json"
     # Mock the responder to avoid needing a real Ollama
     import eval_harness.responders as resp_mod
     orig = resp_mod.RESPONDERS["ollama"]
     resp_mod.RESPONDERS["ollama"] = lambda item: item["ideal_answer"]
     try:
         code = main(["--responder", "ollama", "--limit", "2",
-                     "--output", str(out)])
+                     "--output", str(out2)])
     finally:
         resp_mod.RESPONDERS["ollama"] = orig
     assert code == 0
-    report = json.loads(out.read_text())
-    assert report["config"]["responder_model"] == "qwen2.5-coder:32b"
-    assert report["config"]["responder_host"] == "http://myhost:11434"
+    report2 = json.loads(out2.read_text())
+    assert report2["config"]["responder_model"] == "qwen2.5-coder:32b"
+    assert report2["config"]["responder_host"] == "http://myhost:11434"

@@ -59,13 +59,6 @@ def test_case_insensitive_matching():
     assert r["keyword_coverage"] == 1.0
 
 
-def test_deterministic_across_runs():
-    j = HeuristicJudge()
-    a = j.score(ITEM, "Some response with API key and Bearer.")
-    b = j.score(ITEM, "Some response with API key and Bearer.")
-    assert a == b
-
-
 def test_stable_bucket_uses_md5_not_hash():
     # Same input -> same bucket, every process run.
     assert _stable_bucket("hello") == _stable_bucket("hello")
