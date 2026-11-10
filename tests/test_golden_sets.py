@@ -19,9 +19,18 @@ def test_all_required_fields_present():
         assert required <= set(item), item["id"]
 
 
-def test_ids_unique():
+def test_ids_unique(tmp_path):
+    # Shipped dataset: ids are unique ...
     ids = [it["id"] for it in load_golden_set()]
     assert len(ids) == len(set(ids))
+    # ... and the loader enforces uniqueness on any loaded set.
+    dup = tmp_path / "dup.json"
+    item = {"id": "A-001", "category": "api", "severity": "low",
+            "question": "q", "expected_keywords": [], "must_not_contain": [],
+            "ideal_answer": "a"}
+    dup.write_text(json.dumps([item, item]))
+    with pytest.raises(ValueError, match="Duplicate id"):
+        load_golden_set(dup)
 
 
 def test_severities_valid():
@@ -44,16 +53,6 @@ def test_rejects_invalid_item(tmp_path):
     bad.write_text(json.dumps([{"id": "X-001"}]))
     with pytest.raises(ValueError, match="missing fields"):
         load_golden_set(bad)
-
-
-def test_rejects_duplicate_ids(tmp_path):
-    dup = tmp_path / "dup.json"
-    item = {"id": "A-001", "category": "api", "severity": "low",
-            "question": "q", "expected_keywords": [], "must_not_contain": [],
-            "ideal_answer": "a"}
-    dup.write_text(json.dumps([item, item]))
-    with pytest.raises(ValueError, match="Duplicate id"):
-        load_golden_set(dup)
 
 
 def test_filter_helpers():

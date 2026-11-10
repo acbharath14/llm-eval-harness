@@ -10,9 +10,7 @@ def test_identical_distributions_no_drift():
     assert r["drift_detected"] is False
     assert r["psi"] == pytest.approx(0.0)
     assert r["severity"] == "none"
-
-
-def test_psi_zero_for_same_distribution():
+    # Same behavior at the raw-psi level: identical distributions -> psi ~ 0.
     assert drift.psi([0.5] * 20, [0.5] * 20) == pytest.approx(0.0)
 
 
