@@ -4,7 +4,7 @@ Evaluate an LLM system against a golden set of 50 Q/A items, score responses
 with a deterministic heuristic judge (or an optional LLM judge), and detect
 regressions with PSI + mean-delta drift detection.
 
-No API keys needed to try it — the heuristic judge and demo responders run
+No API keys needed to try it: the heuristic judge and demo responders run
 fully offline.
 
 ## Quickstart
@@ -31,7 +31,7 @@ streamlit run dashboard.py
 
 ## Full evaluation flow: from runs to model selection
 
-**Step 1 — Evaluate each candidate.** Run the harness once per model,
+**Step 1: Evaluate each candidate.** Run the harness once per model,
 saving a report each time:
 
 ```bash
@@ -49,35 +49,35 @@ OLLAMA_MODEL=qwen2.5-coder:32b PYTHONPATH=src python -m eval_harness.runner \
 ```
 
 Each report's `config` block records the exact model, timestamp, and item
-count — so you always know what was evaluated against what.
+count, so you always know what was evaluated against what.
 
-**Step 2 — Compare.** Open the dashboard, switch to **Compare models**,
+**Step 2: Compare.** Open the dashboard, switch to **Compare models**,
 upload both JSONs. You get side-by-side:
 
 - Mean score, drift vs baseline, per-model columns
 - Mean by severity (critical / medium / low)
 - Mean by category (billing, security, troubleshooting, …)
-- **Selection guidance** — who leads per severity, with a ⚠️ flag when
+- **Selection guidance**: who leads per severity, with a ⚠️ flag when
   critical-severity scores diverge significantly
 
-**Step 3 — Interpret and decide.** Reading the comparison:
+**Step 3: Interpret and decide.** Reading the comparison:
 
 1. **Check critical severity first.** If one model scores 0.85 on critical
-   items and another scores 0.60, the choice is made — critical covers
+   items and another scores 0.60, the choice is made: critical covers
    security and adversarial refusal, the things that cause incidents.
 2. **Then look at the mean.** Among models that pass the critical bar,
    higher mean = better overall coverage.
 3. **Check drift.** A model with good scores but PSI > 0.25 vs your
-   production baseline is behaving differently from what's deployed —
-   investigate before switching.
+   production baseline is behaving differently from what's deployed.
+   Investigate before switching.
 4. **Drill into categories.** If a model wins overall but tanks on `api`
    questions and your use case is API-heavy, it's the wrong pick.
 5. **Read the worst 5 items.** The per-item table (in View saved report
-   mode) shows exactly where each model fails — patterns here beat
+   mode) shows exactly where each model fails: patterns here beat
    aggregates for debugging.
 
 **The rule:** one eval run tells you almost nothing. The value is the
-*trend* — same golden set, same judge, every model change. That's what the
+*trend*: same golden set, same judge, every model change. That's what the
 provenance block and the comparison view are for.
 
 ## Evaluating real models with Ollama
@@ -122,17 +122,17 @@ Env vars:
 
 ## What it does
 
-1. **Golden set** — 50 hand-written Q/A items across billing, security,
+1. **Golden set**: 50 hand-written Q/A items across billing, security,
    troubleshooting, limits, API, and adversarial (refusal) cases. Each item
    has expected keywords, forbidden phrases, severity, and a reference answer.
-2. **Judging** — the heuristic judge scores keyword coverage (0–1), subtracts
+2. **Judging**: the heuristic judge scores keyword coverage (0–1), subtracts
    0.3 per forbidden phrase, and penalizes very short/long answers. Fully
    deterministic: same input → same score, every run.
-3. **Metrics** — grounded precision/recall against expected keywords,
+3. **Metrics**: grounded precision/recall against expected keywords,
    severity slices (critical/medium/low), and *augmented* keywords: novel
    content words the response used that aren't in the golden set. Augmented
-   keywords are diagnostic only — a system is never penalized for them.
-4. **Drift detection** — compares the current score distribution to the
+   keywords are diagnostic only, a system is never penalized for them.
+4. **Drift detection**: compares the current score distribution to the
    checked-in healthy baseline with PSI (bins scores into 10 bins;
    PSI > 0.25 = significant drift) and mean-delta (|Δmean| > 0.1 = drift).
    Exit code 1 when drift is detected, so CI can gate on it.
@@ -149,7 +149,7 @@ Env vars:
 │   └── runner.py        # CLI entry point
 ├── data/golden_qa.json
 ├── baselines/baseline_results.json   # healthy baseline (mean 0.814)
-├── tests/               # 53 tests
+├── tests/               # 48 tests
 ├── dashboard.py         # Streamlit UI
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
@@ -169,7 +169,7 @@ Without `JUDGE_API_KEY`, the LLM judge skips gracefully and reports why.
 
 ## CI
 
-`.github/workflows/ci.yml` runs the pytest suite on push and pull requests (Python 3.12). The suite is green (53 tests).
+`.github/workflows/ci.yml` runs the pytest suite on push and pull requests (Python 3.12), with 48 tests passing.
 
 ## Honest limits
 
