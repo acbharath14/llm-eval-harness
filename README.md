@@ -82,8 +82,8 @@ upload the report JSONs. You get side-by-side:
    Investigate before switching.
 4. **Drill into categories.** If a model wins overall but tanks on `api`
    questions and your use case is API-heavy, it's the wrong pick.
-5. **Read the worst 5 items.** The per-item table (in View saved report
-   mode) shows exactly where each model fails: patterns here beat
+5. **Read the lowest-scoring items.** Sort the per-item table (in View saved report
+   mode) by score: it shows exactly where each model fails, and patterns here beat
    aggregates for debugging.
 
 **The rule:** one eval run tells you almost nothing. The value is the
@@ -171,6 +171,8 @@ Env vars:
 ├── baselines/baseline_results.json   # healthy baseline (mean 0.814)
 ├── tests/               # 59 tests
 ├── dashboard.py         # Streamlit UI
+├── docs/                # screenshots (dashboard comparison figure)
+├── frameworks/         # eval-framework comparison (promptfoo, DeepEval, ragas; phase 1/2)
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
 
