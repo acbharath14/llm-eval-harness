@@ -46,13 +46,19 @@ OLLAMA_MODEL=qwen2.5-coder:7b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic \
   --baseline baselines/baseline_results.json \
   --output reports/qwen25-coder-7b.json
+
+# Candidate C: gpt-oss:20b
+OLLAMA_TIMEOUT=300 OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
+  --responder ollama --judge heuristic \
+  --baseline baselines/baseline_results.json \
+  --output reports/gpt-oss-20b.json
 ```
 
 Each report's `config` block records the exact model, timestamp, and item
 count, so you always know what was evaluated against what.
 
 **Step 2: Compare.** Open the dashboard, switch to **Compare models**,
-upload both JSONs. You get side-by-side:
+upload the report JSONs. You get side-by-side:
 
 - Mean score, drift vs baseline, per-model columns
 - Mean by severity (critical / medium / low)
