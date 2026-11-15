@@ -103,11 +103,14 @@ ollama pull qwen3:8b
 # Evaluate qwen3:8b with the heuristic judge
 OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic \
-  --baseline baselines/baseline_results.json
+  --baseline baselines/baseline_results.json \
+  --output reports/qwen3-8b.json
 
 # Use a bigger model
-OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
-  --responder ollama --judge heuristic
+OLLAMA_TIMEOUT=300 OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
+  --responder ollama --judge heuristic \
+  --baseline baselines/baseline_results.json \
+  --output reports/gpt-oss-20b.json
 
 # Quick smoke test with just 5 questions (useful for slow local models)
 OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
