@@ -176,6 +176,28 @@ Env vars:
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
 
+## Framework comparison
+
+`frameworks/` compares this harness against three eval frameworks on a
+frozen 12-item subset (`frameworks/comparison/subset.json`, 2 per
+category), so every framework scores the same saved responses:
+
+- **Phase 0 gate (2026-10-31, iMac, qwen3:8b on CPU):** promptfoo PASS
+  (2/2 asserts green, 9m32s, zero friction), DeepEval PASS (needed a
+  600s per-attempt timeout override for CPU judges), ragas FAIL and
+  parked (its metrics require InstructorLLM and reject ChatOllama).
+- **Phase 1:** promptfoo keyword asserts (mirroring the heuristic judge)
+  and DeepEval AnswerRelevancy on the frozen sets. Headline: promptfoo
+  agrees with the heuristic judge on 10/12 items (83%), DeepEval
+  AnswerRelevancy on 5/12 (42%). The recommendation is a layered
+  strategy: heuristic as the base gate, promptfoo for CI regression
+  detection, LLM judge for offline deep-dives only, ragas not adopted.
+  Full per-item verdicts, runtimes, and the recommendation:
+  `frameworks/comparison/phase1/report.md`.
+- **Phase 2 (not started):** DeepEval RAG metrics (Faithfulness,
+  ContextualRecall, ContextualRelevancy) against sidekick-rag-assistant
+  as a black-box target. Runbook: `frameworks/comparison/phase2/README.md`.
+
 ## Optional: LLM judge
 
 Set these env vars to use an OpenAI-compatible judge instead of the heuristic:
