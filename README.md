@@ -46,13 +46,19 @@ OLLAMA_MODEL=qwen2.5-coder:7b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic \
   --baseline baselines/baseline_results.json \
   --output reports/qwen25-coder-7b.json
+
+# Candidate C: gpt-oss:20b
+OLLAMA_TIMEOUT=300 OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
+  --responder ollama --judge heuristic \
+  --baseline baselines/baseline_results.json \
+  --output reports/gpt-oss-20b.json
 ```
 
 Each report's `config` block records the exact model, timestamp, and item
 count, so you always know what was evaluated against what.
 
 **Step 2: Compare.** Open the dashboard, switch to **Compare models**,
-upload both JSONs. You get side-by-side:
+upload the report JSONs. You get side-by-side:
 
 - Mean score, drift vs baseline, per-model columns
 - Mean by severity (critical / medium / low)
@@ -76,8 +82,8 @@ upload both JSONs. You get side-by-side:
    Investigate before switching.
 4. **Drill into categories.** If a model wins overall but tanks on `api`
    questions and your use case is API-heavy, it's the wrong pick.
-5. **Read the worst 5 items.** The per-item table (in View saved report
-   mode) shows exactly where each model fails: patterns here beat
+5. **Read the lowest-scoring items.** Sort the per-item table (in View saved report
+   mode) by score: it shows exactly where each model fails, and patterns here beat
    aggregates for debugging.
 
 **The rule:** one eval run tells you almost nothing. The value is the
@@ -97,11 +103,14 @@ ollama pull qwen3:8b
 # Evaluate qwen3:8b with the heuristic judge
 OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic \
-  --baseline baselines/baseline_results.json
+  --baseline baselines/baseline_results.json \
+  --output reports/qwen3-8b.json
 
 # Use a bigger model
-OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
-  --responder ollama --judge heuristic
+OLLAMA_TIMEOUT=300 OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
+  --responder ollama --judge heuristic \
+  --baseline baselines/baseline_results.json \
+  --output reports/gpt-oss-20b.json
 
 # Quick smoke test with just 5 questions (useful for slow local models)
 OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
@@ -162,8 +171,32 @@ Env vars:
 ├── baselines/baseline_results.json   # healthy baseline (mean 0.814)
 ├── tests/               # 59 tests
 ├── dashboard.py         # Streamlit UI
+├── docs/                # screenshots (dashboard comparison figure)
+├── frameworks/         # eval-framework comparison (promptfoo, DeepEval, ragas; phase 1/2)
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
+
+## Framework comparison
+
+`frameworks/` compares this harness against three eval frameworks on a
+frozen 12-item subset (`frameworks/comparison/subset.json`, 2 per
+category), so every framework scores the same saved responses:
+
+- **Phase 0 gate (2026-10-31, iMac, qwen3:8b on CPU):** promptfoo PASS
+  (2/2 asserts green, 9m32s, zero friction), DeepEval PASS (needed a
+  600s per-attempt timeout override for CPU judges), ragas FAIL and
+  parked (its metrics require InstructorLLM and reject ChatOllama).
+- **Phase 1:** promptfoo keyword asserts (mirroring the heuristic judge)
+  and DeepEval AnswerRelevancy on the frozen sets. Headline: promptfoo
+  agrees with the heuristic judge on 10/12 items (83%), DeepEval
+  AnswerRelevancy on 5/12 (42%). The recommendation is a layered
+  strategy: heuristic as the base gate, promptfoo for CI regression
+  detection, LLM judge for offline deep-dives only, ragas not adopted.
+  Full per-item verdicts, runtimes, and the recommendation:
+  `frameworks/comparison/phase1/report.md`.
+- **Phase 2 (not started):** DeepEval RAG metrics (Faithfulness,
+  ContextualRecall, ContextualRelevancy) against sidekick-rag-assistant
+  as a black-box target. Runbook: `frameworks/comparison/phase2/README.md`.
 
 ## Optional: LLM judge
 
