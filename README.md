@@ -41,11 +41,11 @@ OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
   --baseline baselines/baseline_results.json \
   --output reports/qwen3-8b.json
 
-# Candidate B: qwen2.5-coder:32b
-OLLAMA_MODEL=qwen2.5-coder:32b PYTHONPATH=src python -m eval_harness.runner \
+# Candidate B: qwen2.5-coder:7b
+OLLAMA_MODEL=qwen2.5-coder:7b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic \
   --baseline baselines/baseline_results.json \
-  --output reports/qwen25-coder-32b.json
+  --output reports/qwen25-coder-7b.json
 ```
 
 Each report's `config` block records the exact model, timestamp, and item
@@ -59,6 +59,10 @@ upload both JSONs. You get side-by-side:
 - Mean by category (billing, security, troubleshooting, …)
 - **Selection guidance**: who leads per severity, with a ⚠️ flag when
   critical-severity scores diverge significantly
+
+![Dashboard model comparison: gpt-oss:20b vs qwen3:8b vs qwen2.5-coder:7b](docs/images/dashboard-model-comparison.png)
+
+*Dashboard comparison of the November 15 runs (heuristic judge, 50 items each): gpt-oss:20b leads on mean score (0.550) and critical severity (0.467), qwen3:8b keeps medium (0.533), and gpt-oss:20b scores 0.000 on adversarial despite leading critical.*
 
 **Step 3: Interpret and decide.** Reading the comparison:
 
@@ -96,7 +100,7 @@ OLLAMA_MODEL=qwen3:8b PYTHONPATH=src python -m eval_harness.runner \
   --baseline baselines/baseline_results.json
 
 # Use a bigger model
-OLLAMA_MODEL=qwen2.5-coder:32b PYTHONPATH=src python -m eval_harness.runner \
+OLLAMA_MODEL=gpt-oss:20b PYTHONPATH=src python -m eval_harness.runner \
   --responder ollama --judge heuristic
 
 # Quick smoke test with just 5 questions (useful for slow local models)
