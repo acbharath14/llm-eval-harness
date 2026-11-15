@@ -81,6 +81,25 @@ golden-set or rubric changes — never to hide a regression:
 python3 gen_baseline.py
 ```
 
+## Judge agreement
+
+Before swapping judges, compare them on the same responses with
+`eval_harness.judge_agreement.compare_reports`. Scores are binarized at
+0.5 (pass/fail), then scikit-learn reports accuracy, Cohen's kappa,
+confusion matrix (rows = first judge, columns = second), and per-class
+precision/recall/F1. Raw scores give mean absolute difference and
+Pearson r.
+
+```
+kappa = (observed agreement − chance agreement) / (1 − chance agreement)
+```
+
+1.0 is perfect agreement, 0 is chance-level, negative is worse than
+chance. Kappa is undefined (reported as null) when both judges give a
+single class, e.g. both pass everything — accuracy and mean absolute
+difference still describe that case. Pairs where either judge skipped
+are dropped and counted in `n_dropped`.
+
 ## LLM judge (optional)
 
 Prompts an OpenAI-compatible chat API with the question, reference answer,

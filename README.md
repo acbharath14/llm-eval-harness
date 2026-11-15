@@ -136,6 +136,12 @@ Env vars:
    checked-in healthy baseline with PSI (bins scores into 10 bins;
    PSI > 0.25 = significant drift) and mean-delta (|Δmean| > 0.1 = drift).
    Exit code 1 when drift is detected, so CI can gate on it.
+5. **Judge agreement** — compares two judges on the same responses with
+   scikit-learn: Cohen's kappa (chance-corrected pass/fail agreement),
+   confusion matrix, per-class precision/recall/F1, mean absolute score
+   difference, and Pearson r. Use it before swapping judges: a new judge
+   that scores higher on average but disagrees on *which* items pass is
+   not a drop-in replacement.
 
 ## Project structure
 
@@ -143,13 +149,14 @@ Env vars:
 ├── src/eval_harness/
 │   ├── golden_sets.py   # load + validate the 50-item dataset
 │   ├── judges.py        # HeuristicJudge (deterministic) + LLMJudge (optional API)
+│   ├── judge_agreement.py  # scikit-learn agreement between two judges
 │   ├── drift.py         # PSI + mean-delta
 │   ├── responders.py    # healthy + regressed demo responders
 │   ├── metrics.py       # grounded/augmented metrics, severity slices
 │   └── runner.py        # CLI entry point
 ├── data/golden_qa.json
 ├── baselines/baseline_results.json   # healthy baseline (mean 0.814)
-├── tests/               # 53 tests
+├── tests/               # 59 tests
 ├── dashboard.py         # Streamlit UI
 └── METHODOLOGY.md       # judge rubric + drift math
 ```
@@ -167,9 +174,31 @@ PYTHONPATH=src python -m eval_harness.runner --judge llm
 
 Without `JUDGE_API_KEY`, the LLM judge skips gracefully and reports why.
 
+## Compare two judges
+
+Before swapping judges, check they agree on the same responses:
+
+```python
+import json
+from eval_harness.judge_agreement import compare_reports
+
+with open("reports/qwen3-8b-heuristic.json") as f:
+    heuristic = json.load(f)
+with open("reports/qwen3-8b-llm.json") as f:
+    llm = json.load(f)
+
+print(compare_reports(heuristic, llm))
+```
+
+Cohen's kappa is the headline number: 1.0 is perfect agreement, 0 is
+chance-level, negative is worse than chance. Skipped scores (an LLM judge
+that failed on an item) and items present in only one report are dropped
+and counted in `n_dropped`. Pass/fail is binarized at 0.5 by default;
+pass `threshold=0.7` to compare at a stricter bar.
+
 ## CI
 
-`.github/workflows/ci.yml` runs the pytest suite on push and pull requests (Python 3.12). The suite is green (53 tests).
+`.github/workflows/ci.yml` runs the pytest suite on push and pull requests (Python 3.12). The suite is green (59 tests).
 
 ## Honest limits
 
