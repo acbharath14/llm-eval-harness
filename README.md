@@ -9,6 +9,30 @@ fully offline.
 
 ## Quickstart
 
+### On Windows
+
+The command blocks in this README use the macOS/Linux form `VAR=value command`
+to set an environment variable for one command. That form does not work in
+PowerShell or cmd. On Windows, set the variables first, then run the commands
+without the prefix:
+
+PowerShell:
+
+```powershell
+$env:OLLAMA_MODEL="qwen3:8b"
+$env:PYTHONPATH="src"
+```
+
+cmd:
+
+```cmd
+set OLLAMA_MODEL=qwen3:8b
+set PYTHONPATH=src
+```
+
+Set them once per terminal window. The same pattern applies to the other
+variables in this README (`JUDGE_API_BASE`, `JUDGE_MODEL`, `JUDGE_API_KEY`).
+
 ```bash
 pip install -r requirements.txt
 
@@ -29,10 +53,20 @@ PYTHONPATH=src pytest tests/ -q
 streamlit run dashboard.py
 ```
 
+On Windows PowerShell, the first run above (healthy demo responder) looks
+like this:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m eval_harness.runner --responder healthy --judge heuristic --baseline baselines/baseline_results.json
+```
+
 ## Full evaluation flow: from runs to model selection
 
 **Step 1: Evaluate each candidate.** Run the harness once per model,
-saving a report each time:
+saving a report each time. On Windows, set `OLLAMA_MODEL` and `PYTHONPATH`
+first (see On Windows in Quickstart) and run the commands without the
+`VAR=value` prefix:
 
 ```bash
 # Candidate A: qwen3:8b
@@ -93,7 +127,10 @@ provenance block and the comparison view are for.
 ## Evaluating real models with Ollama
 
 The `ollama` responder queries a local Ollama instance, so you can evaluate
-Qwen (or any Ollama model) against the golden set:
+Qwen (or any Ollama model) against the golden set. On Windows, run
+`ollama serve` in its own terminal window, or start it from PowerShell with
+`Start-Process ollama serve`: the `&` backgrounding in the block below is
+macOS/Linux shell syntax and does not work in cmd or PowerShell.
 
 ```bash
 # Make sure Ollama is running with a model pulled
@@ -208,6 +245,24 @@ export JUDGE_API_KEY="sk-..."
 export JUDGE_MODEL="gpt-4o-mini"
 PYTHONPATH=src python -m eval_harness.runner --judge llm
 ```
+On Windows PowerShell:
+
+```powershell
+$env:JUDGE_API_BASE="https://api.openai.com/v1"  # or any compatible endpoint
+$env:JUDGE_API_KEY="sk-..."
+$env:JUDGE_MODEL="gpt-4o-mini"
+```
+
+cmd:
+
+```cmd
+set JUDGE_API_BASE=https://api.openai.com/v1
+set JUDGE_API_KEY=sk-...
+set JUDGE_MODEL=gpt-4o-mini
+```
+
+Then run the same `python -m eval_harness.runner --judge llm` command
+(with `PYTHONPATH` set first, as shown in On Windows in Quickstart).
 
 Without `JUDGE_API_KEY`, the LLM judge skips gracefully and reports why.
 
